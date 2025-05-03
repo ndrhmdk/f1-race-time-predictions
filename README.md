@@ -127,6 +127,7 @@ model = StackingRegressor(
 
 ### 4. 📈 **Evaluation**
 Models were evaluated using **MSE (Mean Absolute Error)**, the formula of **MSE**:
+
 $$\text{MSE}=\frac{1}{n}\sum^n_{i=1}|y_i-x_i|$$
 * $\text{MSE}$: mean absolute erro
 * $y_i$: prediction
