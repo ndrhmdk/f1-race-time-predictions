@@ -1,6 +1,8 @@
 # 🏎️ **F1 Race Time Prediction** – *"Let's ride, let's ride, let's ride, let's ride..."*  
 **Inspired by Charli XCX - *Vroom Vroom***
 
+![alt text](<project github.png>)
+
 ## 🚀 **Project Overview**
 After vibing to Charli XCX's *"Vroom Vroom"*, I got the idea to combine two passions—Formula 1 and Machine Learning. This project aims to **predict F1 Race Time** based on **Qualifying Time** using real-world data from 19 different F1 drivers.  
 
