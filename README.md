@@ -139,4 +139,5 @@ $$\text{MSE}=\frac{1}{n}\sum^n_{i=1}|y_i-x_i|$$
 * Try deep learning models (e.g., neural nets)
 * Extend to predicting podium finishes or pit stop timing
 
-> Since machine learning is quite new to me, so there might be some errors, something that might not be too effective... So please reach out to me to let me know how I could improve this via my [`Gmail`](andrhmdk@gmail.com)!
+> Since machine learning is quite new to me, so there might be some errors, something that might not be too effective... So please reach out to me to let me know how I could improve this via my email below </br>
+> [![email](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:andrhmdk@gmail.com) !
