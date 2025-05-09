@@ -1,146 +1,128 @@
-# 🏎️ **F1 Race Time Prediction** – *"Let's ride, let's ride, let's ride, let's ride..."*  
-**Inspired by Charli XCX - *Vroom Vroom***
+# 🏎️ **F1 Race Time Prediction – "*Let's ride, let's ride, let's ride, let's ride...*"**
+
+**Insprised by** Charli xcx - *Vroom Vroom*
 
 ![alt text](<project github.png>)
 
 ## 🚀 **Project Overview**
-After vibing to Charli XCX's *"Vroom Vroom"*, I got the idea to combine two passions—Formula 1 and Machine Learning. This project aims to **predict F1 Race Time** based on **Qualifying Time** using real-world data from 19 different F1 drivers.  
+After vibing to Charli xcx's *Vroom Vroom* and watched some videos of [Mar Antaya](https://github.com/mar-antaya) building her Machine Learning model to predict the result of the F1 race, I decided to try it too! 
 
-> *"Let's ride, let's ride, let's ride, let's ride"* — Charli XCX 
+This project predicts F1 race times based on qualifying times, using real-world telemetry data and sector performance from actual F1 sessions.
 
-> That's the energy that drove this project forward. 🏁
+“Let’s ride, let’s ride, let’s ride, let’s ride” — Charli XCX
+That’s the energy that fueled this engine. 🏁
 
----
+### 🎯 **Project Goal**
+Using qualifying data (and optionally sector breakdowns) to predict the average **race lap time** for each driver.
 
-## 🧠 **Goal**
-Given the **Qualifying Time** for each driver, predict their **Race Time** using various regression models. Each driver is represented by their standard F1 abbreviation.
+Two main versions:
+* **Basic**: Uses just qualifying times.
+* **Advanced**: Addes sector times and averages per driver for better granularity.
 
-## 📦 **Project Workflow**
-This project consists of four main stages.
-### 1. 🏁 **Data Mining**
-To collect the data, I used the [`FastF1`](https://theoehrly.github.io/Fast-F1/) library, a Python API that allows access to real-time and historical Formula 1 timing data, including qualifying and race sessions. I fetched:
-- **Qualifying time** for each driver
-    ```python
-    quali_ses = fastf1.get_session(2024, 3, "Q")
-    ```
-- **Race time** (total session time)
-    ```python
-    session = fastf1.get_session(2024, 3, "R") 
-    ```
+### 🧱 **Tech Stack**
+* **Language**: Python
+* **Data Source**: from [`FastF1`](https://pypi.org/project/fastf1/) API.
+* **Libraries used**: `fastf1`, `numpy`, `pandas`, `matplotlib.pyplot`, `seaborn`, `sklearn`, `xgboost`...
+* **Modeling Methods**: Linear Regression, RidgeCV, Random Forest Regressor, Gradient Boosting Regressor, Stacking Regressor, XGB Regressor...
+* **Metrics**: MAE, RMSE, R² Score, MAPE
 
-Other libraries used in this step:
-- `pandas` for data manipulation
-- `numpy` for numerical operations
-- `matplotlib`, `seaborn` - for visualizations
-- `scikit-learn`, `xgboost` - for machine learning modeling
+## ⚙️ **Project Workflow**
+### **1. 🏁 Data Collection**:
+* Pulled real telemetry and timing data from F1 sessions using `FastF1`.
+* Cleaned and transformed lap and qualifying times into numerical seconds.
+* Mapped driver codes (e.g., `VER` → Max Verstappen).
+### **2. 🧪 Feature Engineering**
+* **Basic version**: Uses jsut the driver's fastest qualifying lap time.
+* **Advanced version**: Adds mean sector times per driver.
 
-### 2. 🧹 **Data Preprocessing**
-Before feeding the data into models, I performed several preprocessing tasks:
-- Merged qualifying and race data by driver and Grand Prix
-- Since there was no missing value, there was no need to do a missing value process.
-- Converted lap and session times to consisten formats (in seconds)
-- Create a data with the following columns: `Driver`, `Qualifying Time (s)`, `DriverCode`, `LapTime (s)`.
+### **3. 🤖 Model Training & Evaluation**
+* Models trained on Qualifying Time → Race Lap Time
+* Evaluated using:
+    * Mean Absolute Error (MAE)
+    * Root Mean Squared Error (RMSE)
+    * Mean Absolute Percentage Error (MAPE)
+    * R² Score
 
-Here are all the drivers in the data
-| **Abbreviation** | **Driver** Name         |
-|--------------|---------------------|
-| ALB          | Alexander Albon     |
-| ALO          | Fernando Alonso     |
-| BOT          | Valtteri Bottas     |
-| GAS          | Pierre Gasly        |
-| HAM          | Lewis Hamilton      |
-| HUL          | Nico Hülkenberg     |
-| LEC          | Charles Leclerc     |
-| MAG          | Kevin Magnussen     |
-| NOR          | Lando Norris        |
-| OCO          | Esteban Ocon        |
-| PER          | Sergio Pérez        |
-| PIA          | Oscar Piastri       |
-| RIC          | Daniel Ricciardo    |
-| RUS          | George Russell      |
-| SAI          | Carlos Sainz        |
-| STR          | Lance Stroll        |
-| TSU          | Yuki Tsunoda        |
-| VER          | Max Verstappen      |
-| ZHO          | Zhou Guanyu         |
+### **4. 🏆 Model Selection**
+* All models ranked on average rank across metrics.
+* Best model selected automatically.
+* Final output: sorted prediction list + winner announcement.
 
-### 3. 🤖 **Modeling**
-The target variable is **Race Time**, and the main feature used is **Qualifying Time**. Multiple regression models were trained and compared:
+### **📈 Sample Output**
+**Basic Version**
+```text
+--- Model Metrics Comparison ---
+                                       Model     MAE    RMSE      R2    MAPE
+0                          Linear Regression  3.7989  6.9325 -0.0009   0.041
+1                    Random Forest Regressor  3.9178  7.1142  -0.054  0.0423
+2                Gradient Boosting Regressor   3.957  7.1249 -0.0572  0.0428
+3                          XGBoost Regressor  3.9281  7.1035 -0.0509  0.0425
+4  Stacking Regressor (rf, xgb, gb, ridgecv)  3.8137  6.8776  0.0149  0.0413
 
-#### ✅ **Models Used**:
-**Linear Regression** – A classic, simple baseline model that assumes a linear relationship between Qualifying and Race Time.
-```python
-from sklearn.linear_model import LinearRegression
+🏆 Best Overall Model: Linear Regression
 
-model = LinearRegression()
+📋 Predicted Race Times:
+              Driver  PredictedRaceTime (s)
+0     Max Verstappen              83.237106
+1       Carlos Sainz              83.545330
+2       Sergio Pérez              83.646930
+...
+16   Nico Hülkenberg              85.589880
+17      Pierre Gasly              85.596730
+18       Zhou Guanyu              85.831893
+
+🏁 The predicted Winner is Max Verstappen with a predicted time of 83.237106 seconds.
 ```
 
-**Random Forest Regressor** – A powerful ensemble method that uses multiple decision trees to reduce variance and improve predictions.
-```python
-from sklearn.ensemble import RandomForestRegressor
+**Advanced Version**
+```text
+🏁 Predicted 2025 Chinese GP Winner with New Drivers and Sector Times 🏁
 
-model = RandomForestRegressor(
-    n_estimators=100, 
-    random_state=42
-)
+                   Driver  PredictedRaceTime (s)
+19         Max Verstappen              92.928038
+14          Oscar Piastri              92.935192
+12           Lando Norris              92.935481
+...
+9         Nico Hülkenberg              94.328500
+13           Esteban Ocon              94.339577
+10            Liam Lawson              94.351038
+
+🔍 Model Evaluation:
+- MAE: 0.2032
+- R2 Score: 0.6134
+- MAPE: 0.0021
+- RMSE: 0.362405
 ```
 
-- **Gradient Boosting Regressor** – Boosts weak learners iteratively, optimizing performance by minimizing prediction errors.
-```python
-from sklearn.ensemble import GradientBoostingRegressor
-
-model = GradientBoostingRegressor(
-    n_estimators=200, 
-    max_depth=4, 
-    learning_rate=0.1, 
-    random_state=42
-)
+## **🗂️ File Structure**
+```bash
+📁 f1-race-predictor/
+├── 📁 predicting/              # Basic version
+│   ├── __pycache__/
+│   ├── f1_utils.py                 
+│   ├── main.py                     
+│   └── output.md                   
+├── 📁 predicting-2.0/          # Advanced version
+│   ├── f2_utils.py
+│   ├── main.py
+│   └── output.md
+├── README.md
+├── f1-prediction.ipynb         # Basic verion (notebook)
+├── f1-predictions-2.ipynb      # Advanced version (notebook)
+└── project_github.png          # Visual asset for README
 ```
 
-**XGBoost Regressor** – Highly optimized gradient boosting library
-```python
-from xgboost import XGBRegressor
-
-model = XGBRegressor(
-    n_estimators=100, 
-    learning_rate=0.1, 
-    max_depth=3, 
-    subsample=0.8, 
-    colsample_bytree=0.8, 
-    random_state=42
-)
-```
-
-**Stacking Regressor** – Combines multiple base regressors (Random Forest, XGBoost, Gradient Boosting) and uses a meta-model (RidgeCV) to learn from their outputs. This can often outperform individual models.
-```python
-from sklearn.ensemble import StackingRegressor
-from sklearn.linear_model import RidgeCV
-
-model = StackingRegressor(
-    estimators=[
-        ('rf', RandomForestRegressor(n_estimators=100, random_state=42)),
-        ('xgb', XGBRegressor(n_estimators=100, learning_rate=0.1, random_state=42)),
-        ('gb', GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, random_state=42))
-    ],
-    final_estimator=RidgeCV(),
-    passthrough=True
-)
-```
-
-### 4. 📈 **Evaluation**
-Models were evaluated using **MSE (Mean Absolute Error)**, the formula of **MSE**:
-
-$$\text{MSE}=\frac{1}{n}\sum^n_{i=1}|y_i-x_i|$$
-* $\text{MSE}$: mean absolute erro
-* $y_i$: prediction
-* $x_i$: true value
-* $n$: total number of data points
-
-# **Next Step**
-* Improve feature engineering
-* Try deep learning models (e.g., neural nets)
+## **🧩 Future Improvements**
+* Include the affection of the weather to the race.
+* Predict total race time, not just average lap.
+* Use telemetry data (braking, throttle, speed traps) as features.
+* Try deep learning models (e.g., neural nets).
 * Extend to predicting podium finishes or pit stop timing
 
-> Since machine learning is quite new to me, so there might be some errors, something that might not be too effective... So please reach out to me to let me know how I could improve this via my email below </br>
-> Special thanks to [Mariana Antaya](https://github.com/mar-antaya) for sharing your project process — it served as a great inspiration for mine!
-> [![email](https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:andrhmdk@gmail.com) !
+## **🎵 Vibe Check**
+> “Let’s ride...”<br>— Charli XCX, but also your regression model probably...
+
+## **📬 Contact**
+Since I am quite new to Machine Learning, Deep Learning ... and I'm still working on my skills, so it would be nice if you guys can give me some tips and method that could help me improve my skills! 
+
+Feel free to reach out via [LinkedIn](https://www.linkedin.com/in/hmdkien/) or [Gmail](andrhmdk@gmail.com). Thank you!
