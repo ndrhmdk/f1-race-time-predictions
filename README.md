@@ -32,7 +32,7 @@ Two main versions:
 * Cleaned and transformed lap and qualifying times into numerical seconds.
 * Mapped driver codes (e.g., `VER` → Max Verstappen).
 ### **2. 🧪 Feature Engineering**
-* **Basic version**: Uses jsut the driver's fastest qualifying lap time.
+* **Basic version**: Uses just the driver's fastest qualifying lap time.
 * **Advanced version**: Adds mean sector times per driver.
 
 ### **3. 🤖 Model Training & Evaluation**
