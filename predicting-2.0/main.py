@@ -10,6 +10,9 @@ def main():
     print("\n🏁 Predicted 2025 Chinese GP Winner with New Drivers and Sector Times 🏁\n")
     print(qualifying[["Driver", "PredictedRaceTime (s)"]])
 
+    winner = qualifying.loc[qualifying["PredictedRaceTime (s)"].idxmin()]
+    print(f"\n🏁 The predicted Winner is {winner['Driver']} with a predicted time of {winner['PredictedRaceTime (s)']:.6f} seconds.")
+
     print(f"\n🔍 Model Evaluation:")
     print(f"- MAE: {mae:.4f}")
     print(f"- R2 Score: {r2:.4f}")
