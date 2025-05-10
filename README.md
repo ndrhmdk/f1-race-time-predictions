@@ -87,6 +87,8 @@ Two main versions:
 13           Esteban Ocon              94.339577
 10            Liam Lawson              94.351038
 
+🏁 The predicted Winner is Max Verstappen with a predicted time of 92.928038 seconds.
+
 🔍 Model Evaluation:
 - MAE: 0.2032
 - R2 Score: 0.6134
