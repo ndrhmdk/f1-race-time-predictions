@@ -1,4 +1,3 @@
-
 from f2_utils import load_and_prepare_data, clear_screen, train_and_evaluate_model
 
 def main():
